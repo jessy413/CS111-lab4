@@ -331,6 +331,17 @@ void write_inode_bitmap(int fd)
 	{
 		errno_exit("lseek");
 	}
+
+	unsigned char *bitmap;
+
+	bitmap = malloc(BLOCK_SIZE);
+	read(fd, bitmap, BLOCK_SIZE);
+
+	bitmap[10] = 1;
+	bitmap[11] = 1;
+	bitmap[12] = 1;
+
+	write(fd, bitmap, BLOCK_SIZE);
 }
 
 void write_inode(int fd, u32 index, struct ext2_inode *inode)
