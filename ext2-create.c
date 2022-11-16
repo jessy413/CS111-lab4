@@ -455,12 +455,6 @@ void write_hello_world_file_block(int fd)
 
 	ssize_t bytes_remaining = BLOCK_SIZE;
 
-	struct ext2_dir_entry hello_entry = {0};
-	dir_entry_set(hello_entry, HELLO_WORLD_INO, "hello-world");
-	dir_entry_write(hello_entry, fd);
-
-	bytes_remaining -= hello_entry.rec_len;
-
 	struct ext2_dir_entry current_entry = {0};
 	dir_entry_set(current_entry, LOST_AND_FOUND_INO, ".");
 	dir_entry_write(current_entry, fd);
@@ -472,6 +466,12 @@ void write_hello_world_file_block(int fd)
 	dir_entry_write(parent_entry, fd);
 
 	bytes_remaining -= parent_entry.rec_len;
+
+	struct ext2_dir_entry hello_entry = {0};
+	dir_entry_set(hello_entry, HELLO_WORLD_INO, "hello-world");
+	dir_entry_write(hello_entry, fd);
+
+	bytes_remaining -= hello_entry.rec_len;
 
 	struct ext2_dir_entry fill_entry = {0};
 	fill_entry.rec_len = bytes_remaining;
