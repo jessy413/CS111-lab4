@@ -365,9 +365,7 @@ void write_root_dir_block(int fd)
 		errno_exit("lseek");
 	}
 
-	ssize_t bytes_remaining = BLOCKSIZE;
-
-	struct ext2_dir_entry = BLOCK_SIZE;
+	ssize_t bytes_remaining = BLOCK_SIZE;
 
 	struct ext2_dir_entry root_entry = {0};
 
