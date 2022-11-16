@@ -384,7 +384,7 @@ void write_root_dir_block(int fd)
 
 	struct ext2_dir_entry root_entry = {0};
 
-	dir_entry_set(root_entry, EXT2_ROOT_INO, "root");
+	dir_entry_set(root_entry, EXT2_ROOT_INO, ".");
 	dir_entry_write(root_entry, fd);
 
 	bytes_remaining -= root_entry.rec_len;
