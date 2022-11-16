@@ -435,7 +435,7 @@ void write_hello_world_file_block(int fd)
 	ssize_t bytes_remaining = BLOCK_SIZE;
 
 	struct ext2_dir_entry hello_entry = {0};
-	dir_entry_set(hello_entry, LOST_AND_FOUND_INO, "hello-world");
+	dir_entry_set(hello_entry, HELLO_WORLD_INO, "hello-world");
 	dir_entry_write(hello_entry, fd);
 
 	bytes_remaining -= hello_entry.rec_len;
