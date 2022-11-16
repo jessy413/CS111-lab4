@@ -298,11 +298,23 @@ void write_block_group_descriptor_table(int fd)
 void write_block_bitmap(int fd)
 {
 	/* This is all you */
+	off_t off = BLOCK_OFFSET(BLOCK_BITMAP_BLOCKNO);
+	off = lseek(fd, off, SEEK_SET);
+	if (off == -1)
+	{
+		errno_exit("lseek");
+	}
 }
 
 void write_inode_bitmap(int fd)
 {
 	/* This is all you */
+	off_t off = BLOCK_OFFSET(INODE_BITMAP_BLOCKNO);
+	off = lseek(fd, off, SEEK_SET);
+	if (off == -1)
+	{
+		errno_exit("lseek");
+	}
 }
 
 void write_inode(int fd, u32 index, struct ext2_inode *inode)
@@ -346,6 +358,27 @@ void write_inode_table(int fd)
 void write_root_dir_block(int fd)
 {
 	/* This is all you */
+	off_t off = BLOCK_OFFSET(ROOT_DIR_BLOCKNO);
+	off = lseek(fd, off, SEEK_SET);
+	if (off == -1)
+	{
+		errno_exit("lseek");
+	}
+
+	ssize_t bytes_remaining = BLOCKSIZE;
+
+	struct ext2_dir_entry = BLOCK_SIZE;
+
+	struct ext2_dir_entry root_entry = {0};
+
+	dir_entry_set(root_entry, EXT2_ROOT_INO, "root");
+	dir_entry_write(root_entry, fd);
+
+	bytes_remaining -= root_entry.rec_len;
+
+	struct ext2_dir_entry fill_entry = {0};
+	fill_entry.rec_len = bytes_remaining;
+	dir_entry_write(fill_entry, fd);
 }
 
 void write_lost_and_found_dir_block(int fd)
