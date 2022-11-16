@@ -304,6 +304,13 @@ void write_block_bitmap(int fd)
 	{
 		errno_exit("lseek");
 	}
+
+	unsigned char *bitmap;
+
+	bitmap = malloc(BLOCK_SIZE);
+	read(fd, bitmap, BLOCK_SIZE);
+
+	bitmap[1] = 1;
 }
 
 void write_inode_bitmap(int fd)
@@ -466,12 +473,6 @@ void write_hello_world_file_block(int fd)
 	dir_entry_write(parent_entry, fd);
 
 	bytes_remaining -= parent_entry.rec_len;
-
-	// struct ext2_dir_entry hello_entry = {0};
-	// dir_entry_set(hello_entry, HELLO_WORLD_INO, "hello-world");
-	// dir_entry_write(hello_entry, fd);
-
-	// bytes_remaining -= hello_entry.rec_len;
 
 	struct ext2_dir_entry fill_entry = {0};
 	fill_entry.rec_len = bytes_remaining;
