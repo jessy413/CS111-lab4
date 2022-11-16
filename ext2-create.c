@@ -391,7 +391,7 @@ void write_inode_table(int fd)
 	root_inode.i_mtime = current_time;
 	root_inode.i_dtime = 0;
 	root_inode.i_gid = 0;
-	root_inode.i_links_count = 2;
+	root_inode.i_links_count = 4;
 	root_inode.i_blocks = 2; /* These are oddly 512 blocks */
 	root_inode.i_block[0] = ROOT_DIR_BLOCKNO;
 	write_inode(fd, EXT2_ROOT_INO, &root_inode);
