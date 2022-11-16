@@ -314,7 +314,7 @@ void write_block_bitmap(int fd)
 	bitmap[1] = 1;
 	bitmap[2] = 1;
 	bitmap[3] = 1;
-	bitmap[4] = 1;
+	// bitmap[4] = 1;
 	bitmap[20] = 1;
 	bitmap[21] = 1;
 	bitmap[22] = 1;
