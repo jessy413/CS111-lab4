@@ -36,7 +36,7 @@ typedef int32_t i32;
 #define LAST_BLOCK HELLO_WORLD_FILE_BLOCKNO
 
 #define NUM_FREE_BLOCKS (NUM_BLOCKS - LAST_BLOCK - 1)
-#define NUM_FREE_INODES 115 //(NUM_INODES - LAST_INO)
+#define NUM_FREE_INODES (NUM_INODES - LAST_INO)
 
 #define EXT2_SUPER_MAGIC 0xEF53
 
@@ -339,8 +339,6 @@ void write_inode_bitmap(int fd)
 
 	bitmap[0] = 255;
 	bitmap[1] = 15;
-
-	bitmap[127] = 128;
 
 	for (int i = 128; i < 1024; i++)
 		bitmap[i] = 255;
