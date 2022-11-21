@@ -311,6 +311,7 @@ void write_block_bitmap(int fd)
 	read(fd, bitmap, BLOCK_SIZE);
 
 	bitmap[0] = 31;
+	bitmap[1] = 0;
 	bitmap[2] = 127;
 	bitmap[127] = 128;
 	/*
