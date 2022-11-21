@@ -328,7 +328,7 @@ void write_block_bitmap(int fd)
 void write_inode_bitmap(int fd)
 {
 	/* This is all you */
-	/*
+
 	off_t off = BLOCK_OFFSET(INODE_BITMAP_BLOCKNO);
 	off = lseek(fd, off, SEEK_SET);
 	if (off == -1)
@@ -341,11 +341,10 @@ void write_inode_bitmap(int fd)
 	bitmap = malloc(BLOCK_SIZE);
 	read(fd, bitmap, BLOCK_SIZE);
 
-	bitmap[10] = 1;
-	bitmap[11] = 1;
-	bitmap[12] = 1;
+	bitmap[0] = 254;
+	bitmap[1] = 31;
 
-	write(fd, bitmap, BLOCK_SIZE);*/
+	write(fd, bitmap, BLOCK_SIZE);
 }
 
 void write_inode(int fd, u32 index, struct ext2_inode *inode)
