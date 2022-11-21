@@ -400,7 +400,7 @@ void write_inode_table(int fd)
 
 	// hello-world
 	struct ext2_inode hello_world_inode = {0};
-	hello_world_inode.i_mode = EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IXUSR | EXT2_S_IRGRP | EXT2_S_IXGRP | EXT2_S_IROTH | EXT2_S_IXOTH;
+	hello_world_inode.i_mode = EXT2_S_IFREG | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IXUSR | EXT2_S_IRGRP | EXT2_S_IXGRP | EXT2_S_IROTH | EXT2_S_IXOTH;
 	hello_world_inode.i_uid = 1000;
 	hello_world_inode.i_size = 1024;
 	hello_world_inode.i_atime = current_time;
