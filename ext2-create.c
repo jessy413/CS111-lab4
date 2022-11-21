@@ -313,15 +313,11 @@ void write_block_bitmap(int fd)
 	bitmap[0] = 255;
 	bitmap[1] = 255;
 	bitmap[2] = 127;
-	// bitmap[127] = 128;
-	/*
-	bitmap[20] = 1;
-	bitmap[21] = 1;
-	bitmap[22] = 1;
+	bitmap[127] = 128;
 
-	for (int i = 1023; i < 8192; i++)
-		bitmap[i] = 1;
-	*/
+	for (int i = 127; i < 1024; i++)
+		bitmap[i] = 255;
+
 	write(fd, bitmap, BLOCK_SIZE);
 }
 
