@@ -313,7 +313,7 @@ void write_block_bitmap(int fd)
 	bitmap[0] = 255;
 	bitmap[1] = 255;
 	bitmap[2] = 127;
-	bitmap[127] = 128;
+	// bitmap[127] = 128;
 	/*
 	bitmap[20] = 1;
 	bitmap[21] = 1;
@@ -341,8 +341,8 @@ void write_inode_bitmap(int fd)
 	bitmap = malloc(BLOCK_SIZE);
 	read(fd, bitmap, BLOCK_SIZE);
 
-	bitmap[0] = 254;
-	bitmap[1] = 31;
+	bitmap[0] = 255;
+	bitmap[1] = 15;
 
 	write(fd, bitmap, BLOCK_SIZE);
 }
