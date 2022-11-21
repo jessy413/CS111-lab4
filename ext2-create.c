@@ -310,9 +310,9 @@ void write_block_bitmap(int fd)
 	bitmap = malloc(BLOCK_SIZE);
 	read(fd, bitmap, BLOCK_SIZE);
 
-	bitmap[0] = 31;
-	bitmap[1] = 0;
-	bitmap[2] = 56;
+	bitmap[0] = 255;
+	bitmap[1] = 255;
+	bitmap[2] = 112;
 	bitmap[127] = 128;
 	/*
 	bitmap[20] = 1;
