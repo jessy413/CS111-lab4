@@ -312,7 +312,7 @@ void write_block_bitmap(int fd)
 
 	bitmap[0] = 255;
 	bitmap[1] = 255;
-	bitmap[2] = 112;
+	bitmap[2] = 127;
 	bitmap[127] = 128;
 	/*
 	bitmap[20] = 1;
