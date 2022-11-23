@@ -519,7 +519,7 @@ void write_hello_world_file_block(int fd)
 	}
 
 	char buf[20];
-	strcpy(buf, "Hello World\n");
+	strcpy(buf, "Hello world\n");
 	size_t nbytes = strlen(buf);
 
 	write(fd, buf, nbytes);
