@@ -152,7 +152,6 @@ struct ext2_dir_entry
 	u32 inode;
 	u16 rec_len;
 	u16 name_len;
-	u8 file_type;
 	u8 name[EXT2_NAME_LEN];
 };
 
