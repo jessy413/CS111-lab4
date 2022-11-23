@@ -340,7 +340,8 @@ void write_inode_bitmap(int fd)
 	bitmap[0] = 255;
 	bitmap[1] = 15;
 
-	for (int i = 128; i < 1024; i++)
+	bitmap[128] = 127;
+	for (int i = 129; i < 1024; i++)
 		bitmap[i] = 255;
 
 	write(fd, bitmap, BLOCK_SIZE);
