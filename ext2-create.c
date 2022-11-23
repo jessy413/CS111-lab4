@@ -426,7 +426,7 @@ void write_inode_table(int fd)
 	hello_world_inode.i_gid = 1000;
 	hello_world_inode.i_links_count = 1;
 	hello_world_inode.i_blocks = 2; /* These are oddly 512 blocks */
-	hello_world_inode.i_block[0] = HELLO_WORLD_FILE_BLOCKNO;
+	hello_world_inode.i_block[0] = HELLO_WORLD_INO;
 	write_inode(fd, HELLO_INO, &hello_inode);
 }
 
@@ -468,7 +468,7 @@ void write_root_dir_block(int fd)
 	bytes_remaining -= hw_entry.rec_len;
 
 	struct ext2_dir_entry hello_entry = {0};
-	dir_entry_set(hello_entry, HELLO_WORLD_INO, "hello");
+	dir_entry_set(hello_entry, HELLO_INO, "hello");
 	dir_entry_write(hello_entry, fd);
 
 	bytes_remaining -= hello_entry.rec_len;
