@@ -286,7 +286,7 @@ void write_block_group_descriptor_table(int fd)
 	block_group_descriptor.bg_inode_table = INODE_TABLE_BLOCKNO;
 	block_group_descriptor.bg_free_blocks_count = NUM_FREE_BLOCKS;
 	block_group_descriptor.bg_free_inodes_count = NUM_FREE_INODES;
-	block_group_descriptor.bg_used_dirs_count = 0;
+	block_group_descriptor.bg_used_dirs_count = 2;
 
 	ssize_t size = sizeof(block_group_descriptor);
 	if (write(fd, &block_group_descriptor, size) != size)
@@ -409,7 +409,7 @@ void write_inode_table(int fd)
 	hello_world_inode.i_mtime = current_time;
 	hello_world_inode.i_dtime = 0;
 	hello_world_inode.i_gid = 1000;
-	hello_world_inode.i_links_count = 2;
+	hello_world_inode.i_links_count = 1;
 	hello_world_inode.i_blocks = 2; /* These are oddly 512 blocks */
 	hello_world_inode.i_block[0] = HELLO_WORLD_FILE_BLOCKNO;
 	write_inode(fd, HELLO_WORLD_INO, &hello_world_inode);
@@ -425,8 +425,8 @@ void write_inode_table(int fd)
 	hello_world_inode.i_dtime = 0;
 	hello_world_inode.i_gid = 1000;
 	hello_world_inode.i_links_count = 1;
-	hello_world_inode.i_blocks = 2; /* These are oddly 512 blocks */
-	hello_world_inode.i_block[0] = HELLO_WORLD_INO;
+	hello_world_inode.i_blocks = 2;					/* These are oddly 512 blocks */
+	hello_world_inode.i_block[0] = HELLO_WORLD_INO; // SHOULD BE PATH TO HELLO_WORLD!!
 	write_inode(fd, HELLO_INO, &hello_inode);
 }
 
