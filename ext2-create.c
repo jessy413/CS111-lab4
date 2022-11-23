@@ -516,24 +516,23 @@ void write_hello_world_file_block(int fd)
 		errno_exit("lseek");
 	}
 
-	/*
-		ssize_t bytes_remaining = BLOCK_SIZE;
+	ssize_t bytes_remaining = BLOCK_SIZE;
 
-		struct ext2_dir_entry current_entry = {0};
-		dir_entry_set(current_entry, HELLO_WORLD_INO, ".");
-		dir_entry_write(current_entry, fd);
+	struct ext2_dir_entry current_entry = {0};
+	dir_entry_set(current_entry, HELLO_WORLD_INO, ".");
+	dir_entry_write(current_entry, fd);
 
-		bytes_remaining -= current_entry.rec_len;
+	bytes_remaining -= current_entry.rec_len;
 
-		struct ext2_dir_entry parent_entry = {0};
-		dir_entry_set(parent_entry, EXT2_ROOT_INO, "..");
-		dir_entry_write(parent_entry, fd);
+	struct ext2_dir_entry parent_entry = {0};
+	dir_entry_set(parent_entry, EXT2_ROOT_INO, "..");
+	dir_entry_write(parent_entry, fd);
 
-		bytes_remaining -= parent_entry.rec_len;
+	bytes_remaining -= parent_entry.rec_len;
 
-		struct ext2_dir_entry fill_entry = {0};
-		fill_entry.rec_len = bytes_remaining;
-		dir_entry_write(fill_entry, fd);*/
+	struct ext2_dir_entry fill_entry = {0};
+	fill_entry.rec_len = bytes_remaining;
+	dir_entry_write(fill_entry, fd);
 }
 
 int main(int argc, char *argv[])
