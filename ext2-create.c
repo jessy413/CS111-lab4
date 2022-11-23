@@ -468,7 +468,7 @@ void write_root_dir_block(int fd)
 	bytes_remaining -= hw_entry.rec_len;
 
 	struct ext2_dir_entry hello_entry = {0};
-	dir_entry_set(hw_entry, HELLO_INO, "hello");
+	dir_entry_set(hello_entry, HELLO_INO, "hello");
 	dir_entry_write(hello_entry, fd);
 
 	bytes_remaining -= hello_entry.rec_len;
