@@ -69,6 +69,10 @@ typedef int32_t i32;
 #define EXT2_S_IWOTH 0x0002
 #define EXT2_S_IXOTH 0x0001
 
+#define EXT2_FT_REG_FILE 1
+#define EXT2_FT_DIR 2
+#define EXT2_FT_SYMLINK 7
+
 #define EXT2_NDIR_BLOCKS 12
 #define EXT2_IND_BLOCK EXT2_NDIR_BLOCKS
 #define EXT2_DIND_BLOCK (EXT2_IND_BLOCK + 1)
@@ -152,6 +156,7 @@ struct ext2_dir_entry
 	u32 inode;
 	u16 rec_len;
 	u16 name_len;
+	u8 file_type;
 	u8 name[EXT2_NAME_LEN];
 };
 
@@ -163,22 +168,23 @@ struct ext2_dir_entry
 		exit(err);       \
 	} while (0)
 
-#define dir_entry_set(entry, inode_num, str)  \
-	do                                        \
-	{                                         \
-		char *s = str;                        \
-		size_t len = strlen(s);               \
-		entry.inode = inode_num;              \
-		entry.name_len = len;                 \
-		memcpy(&entry.name, s, len);          \
-		if ((len % 4) != 0)                   \
-		{                                     \
-			entry.rec_len = 12 + len / 4 * 4; \
-		}                                     \
-		else                                  \
-		{                                     \
-			entry.rec_len = 8 + len;          \
-		}                                     \
+#define dir_entry_set(entry, inode_num, str, ft) \
+	do                                           \
+	{                                            \
+		char *s = str;                           \
+		size_t len = strlen(s);                  \
+		entry.file_type = ft;                    \
+		entry.inode = inode_num;                 \
+		entry.name_len = len;                    \
+		memcpy(&entry.name, s, len);             \
+		if ((len % 4) != 0)                      \
+		{                                        \
+			entry.rec_len = 12 + len / 4 * 4;    \
+		}                                        \
+		else                                     \
+		{                                        \
+			entry.rec_len = 8 + len;             \
+		}                                        \
 	} while (0)
 
 #define dir_entry_write(entry, fd)           \
@@ -444,31 +450,31 @@ void write_root_dir_block(int fd)
 
 	struct ext2_dir_entry root_entry = {0};
 
-	dir_entry_set(root_entry, EXT2_ROOT_INO, ".");
+	dir_entry_set(root_entry, EXT2_ROOT_INO, ".", EXT2_FT_DIR);
 	dir_entry_write(root_entry, fd);
 
 	bytes_remaining -= root_entry.rec_len;
 
 	struct ext2_dir_entry parent_entry = {0};
-	dir_entry_set(parent_entry, EXT2_ROOT_INO, "..");
+	dir_entry_set(parent_entry, EXT2_ROOT_INO, "..", EXT2_FT_DIR);
 	dir_entry_write(parent_entry, fd);
 
 	bytes_remaining -= parent_entry.rec_len;
 
 	struct ext2_dir_entry lf_entry = {0};
-	dir_entry_set(lf_entry, LOST_AND_FOUND_INO, "lost+found");
+	dir_entry_set(lf_entry, LOST_AND_FOUND_INO, "lost+found", EXT2_FT_DIR);
 	dir_entry_write(lf_entry, fd);
 
 	bytes_remaining -= lf_entry.rec_len;
 
 	struct ext2_dir_entry hw_entry = {0};
-	dir_entry_set(hw_entry, HELLO_WORLD_INO, "hello-world");
+	dir_entry_set(hw_entry, HELLO_WORLD_INO, "hello-world", EXT2_FT_REG_FILE);
 	dir_entry_write(hw_entry, fd);
 
 	bytes_remaining -= hw_entry.rec_len;
 
 	struct ext2_dir_entry hello_entry = {0};
-	dir_entry_set(hello_entry, HELLO_INO, "hello");
+	dir_entry_set(hello_entry, HELLO_INO, "hello", EXT2_FT_SYMLINK);
 	dir_entry_write(hello_entry, fd);
 
 	bytes_remaining -= hello_entry.rec_len;
@@ -490,13 +496,13 @@ void write_lost_and_found_dir_block(int fd)
 	ssize_t bytes_remaining = BLOCK_SIZE;
 
 	struct ext2_dir_entry current_entry = {0};
-	dir_entry_set(current_entry, LOST_AND_FOUND_INO, ".");
+	dir_entry_set(current_entry, LOST_AND_FOUND_INO, ".", EXT2_FT_DIR);
 	dir_entry_write(current_entry, fd);
 
 	bytes_remaining -= current_entry.rec_len;
 
 	struct ext2_dir_entry parent_entry = {0};
-	dir_entry_set(parent_entry, EXT2_ROOT_INO, "..");
+	dir_entry_set(parent_entry, EXT2_ROOT_INO, "..", EXT2_FT_DIR);
 	dir_entry_write(parent_entry, fd);
 
 	bytes_remaining -= parent_entry.rec_len;
