@@ -338,7 +338,7 @@ void write_inode_bitmap(int fd)
 	read(fd, bitmap, BLOCK_SIZE);
 
 	bitmap[0] = 255;
-	bitmap[1] = 31;
+	bitmap[1] = 15;
 
 	// 128 inodes, rest 129-8192 bits need to be padded to 1
 	for (int i = 16; i < 1024; i++)
@@ -426,7 +426,7 @@ void write_inode_table(int fd)
 	hello_world_inode.i_gid = 1000;
 	hello_world_inode.i_links_count = 1;
 	hello_world_inode.i_blocks = 2; /* These are oddly 512 blocks */
-	hello_world_inode.i_block[0] = HELLO_WORLD_FILE_BLOCKNO;
+	hello_world_inode.i_block[0] = "hello-world";
 	write_inode(fd, HELLO_INO, &hello_inode);
 }
 
