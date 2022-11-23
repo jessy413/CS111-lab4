@@ -395,7 +395,7 @@ void write_inode_table(int fd)
 	root_inode.i_dtime = 0;
 	root_inode.i_gid = 0;
 	root_inode.i_links_count = 3;
-	root_inode.i_blocks = 3; /* These are oddly 512 blocks */
+	root_inode.i_blocks = 2; /* These are oddly 512 blocks */
 	root_inode.i_block[0] = ROOT_DIR_BLOCKNO;
 	write_inode(fd, EXT2_ROOT_INO, &root_inode);
 
@@ -425,7 +425,7 @@ void write_inode_table(int fd)
 	hello_world_inode.i_dtime = 0;
 	hello_world_inode.i_gid = 1000;
 	hello_world_inode.i_links_count = 1;
-	hello_world_inode.i_blocks = 2;					/* These are oddly 512 blocks */
+	hello_world_inode.i_blocks = 0;					/* These are oddly 512 blocks */
 	hello_world_inode.i_block[0] = HELLO_WORLD_INO; // SHOULD BE PATH TO HELLO_WORLD!!
 	write_inode(fd, HELLO_INO, &hello_inode);
 }
