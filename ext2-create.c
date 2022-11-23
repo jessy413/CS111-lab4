@@ -416,17 +416,17 @@ void write_inode_table(int fd)
 
 	// hello
 	struct ext2_inode hello_inode = {0};
-	hello_world_inode.i_mode = EXT2_S_IFLNK | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IXUSR | EXT2_S_IRGRP | EXT2_S_IXGRP | EXT2_S_IROTH | EXT2_S_IXOTH;
-	hello_world_inode.i_uid = 1000;
-	hello_world_inode.i_size = 11;
-	hello_world_inode.i_atime = current_time;
-	hello_world_inode.i_ctime = current_time;
-	hello_world_inode.i_mtime = current_time;
-	hello_world_inode.i_dtime = 0;
-	hello_world_inode.i_gid = 1000;
-	hello_world_inode.i_links_count = 1;
-	hello_world_inode.i_blocks = 0;					/* These are oddly 512 blocks */
-	hello_world_inode.i_block[0] = HELLO_WORLD_INO; // SHOULD BE PATH TO HELLO_WORLD!!
+	hello_inode.i_mode = EXT2_S_IFLNK | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IXUSR | EXT2_S_IRGRP | EXT2_S_IXGRP | EXT2_S_IROTH | EXT2_S_IXOTH;
+	hello_inode.i_uid = 1000;
+	hello_inode.i_size = 11;
+	hello_inode.i_atime = current_time;
+	hello_inode.i_ctime = current_time;
+	hello_inode.i_mtime = current_time;
+	hello_inode.i_dtime = 0;
+	hello_inode.i_gid = 1000;
+	hello_inode.i_links_count = 1;
+	hello_inode.i_blocks = 0;								 /* These are oddly 512 blocks */
+	hello_world_inode.i_block[0] = HELLO_WORLD_FILE_BLOCKNO; // SHOULD BE PATH TO HELLO_WORLD!!
 	write_inode(fd, HELLO_INO, &hello_inode);
 }
 
