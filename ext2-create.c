@@ -301,8 +301,7 @@ void write_block_bitmap(int fd)
 	unsigned char *bitmap;
 
 	bitmap = malloc(BLOCK_SIZE);
-	if (read(fd, bitmap, BLOCK_SIZE) == -1)
-		errno_exit("read");
+	read(fd, bitmap, BLOCK_SIZE);
 
 	bitmap[0] = 255;
 	bitmap[1] = 255;
@@ -330,8 +329,7 @@ void write_inode_bitmap(int fd)
 	unsigned char *bitmap;
 
 	bitmap = malloc(BLOCK_SIZE);
-	if (read(fd, bitmap, BLOCK_SIZE) == -1)
-		errno_exit("read");
+	read(fd, bitmap, BLOCK_SIZE);
 
 	bitmap[0] = 255;
 	bitmap[1] = 31;
@@ -340,8 +338,7 @@ void write_inode_bitmap(int fd)
 	for (int i = 16; i < 1024; i++)
 		bitmap[i] = 255;
 
-	if (write(fd, bitmap, BLOCK_SIZE) != BLOCK_SIZE)
-		errno_exit("write");
+	write(fd, bitmap, BLOCK_SIZE);
 }
 
 void write_inode(int fd, u32 index, struct ext2_inode *inode)
@@ -513,8 +510,7 @@ void write_hello_world_file_block(int fd)
 	strcpy(buf, "Hello world\n");
 	size_t nbytes = strlen(buf);
 
-	if (write(fd, buf, nbytes) != nbytes)
-		errno_exit("write");
+	write(fd, buf, nbytes);
 }
 
 int main(int argc, char *argv[])
