@@ -213,8 +213,6 @@ void write_superblock(int fd)
 
 	struct ext2_superblock superblock = {0};
 
-	/* These are intentionally incorrectly set as 0, you should set them
-	   correctly and delete this comment */
 	superblock.s_inodes_count = NUM_INODES;
 	superblock.s_blocks_count = NUM_BLOCKS;
 	superblock.s_r_blocks_count = 0;
@@ -241,8 +239,6 @@ void write_superblock(int fd)
 	superblock.s_def_resuid = 0;		   /* root */
 	superblock.s_def_resgid = 0;		   /* root */
 
-	/* You can leave everything below this line the same, delete this
-	   comment when you're done the lab */
 	superblock.s_uuid[0] = 0x5A;
 	superblock.s_uuid[1] = 0x1E;
 	superblock.s_uuid[2] = 0xAB;
@@ -279,8 +275,6 @@ void write_block_group_descriptor_table(int fd)
 
 	struct ext2_block_group_descriptor block_group_descriptor = {0};
 
-	/* These are intentionally incorrectly set as 0, you should set them
-	   correctly and delete this comment */
 	block_group_descriptor.bg_block_bitmap = BLOCK_BITMAP_BLOCKNO;
 	block_group_descriptor.bg_inode_bitmap = INODE_BITMAP_BLOCKNO;
 	block_group_descriptor.bg_inode_table = INODE_TABLE_BLOCKNO;
@@ -297,7 +291,6 @@ void write_block_group_descriptor_table(int fd)
 
 void write_block_bitmap(int fd)
 {
-	/* This is all you */
 	off_t off = BLOCK_OFFSET(BLOCK_BITMAP_BLOCKNO);
 	off = lseek(fd, off, SEEK_SET);
 	if (off == -1)
@@ -318,13 +311,15 @@ void write_block_bitmap(int fd)
 	for (int i = 128; i < 1024; i++)
 		bitmap[i] = 255;
 
-	write(fd, bitmap, BLOCK_SIZE);
+	if (write(fd, bitmap,BLOCK_SIZE) != BLOCK_SIZE)
+	{
+		errno_exit("write");
+	}
+
 }
 
 void write_inode_bitmap(int fd)
 {
-	/* This is all you */
-
 	off_t off = BLOCK_OFFSET(INODE_BITMAP_BLOCKNO);
 	off = lseek(fd, off, SEEK_SET);
 	if (off == -1)
@@ -381,8 +376,6 @@ void write_inode_table(int fd)
 	lost_and_found_inode.i_block[0] = LOST_AND_FOUND_DIR_BLOCKNO;
 	write_inode(fd, LOST_AND_FOUND_INO, &lost_and_found_inode);
 
-	/* You should add your 3 other inodes in this function and delete this
-	   comment */
 
 	// root
 	struct ext2_inode root_inode = {0};
@@ -401,7 +394,7 @@ void write_inode_table(int fd)
 
 	// hello-world
 	struct ext2_inode hello_world_inode = {0};
-	hello_world_inode.i_mode = EXT2_S_IFREG | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IRGRP | EXT2_S_IROTH;
+	hello_world_inode.i_mode = EXT2_S_IFREG | EXT2_S_IRUSR | EXT2_S_IWUSR  | EXT2_S_IRGRP | EXT2_S_IROTH;
 	hello_world_inode.i_uid = 1000;
 	hello_world_inode.i_size = 12;
 	hello_world_inode.i_atime = current_time;
@@ -416,7 +409,7 @@ void write_inode_table(int fd)
 
 	// hello
 	struct ext2_inode hello_inode = {0};
-	hello_inode.i_mode = EXT2_S_IFLNK | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IRGRP | EXT2_S_IROTH;
+	hello_inode.i_mode = EXT2_S_IFLNK | EXT2_S_IRUSR | EXT2_S_IWUSR  | EXT2_S_IRGRP  | EXT2_S_IROTH ;
 	hello_inode.i_uid = 1000;
 	hello_inode.i_size = 11;
 	hello_inode.i_atime = current_time;
@@ -426,15 +419,13 @@ void write_inode_table(int fd)
 	hello_inode.i_gid = 1000;
 	hello_inode.i_links_count = 1;
 	hello_inode.i_blocks = 0; /* These are oddly 512 blocks */
-	char target[20] = "hello-world";
+	char target[11] = "hello-world";
 	strcpy((char *)&hello_inode.i_block[0], target);
-	// hello_inode.i_block[0] = HELLO_WORLD_FILE_BLOCKNO; // SHOULD BE PATH TO HELLO_WORLD!!
 	write_inode(fd, HELLO_INO, &hello_inode);
 }
 
 void write_root_dir_block(int fd)
 {
-	/* This is all you */
 	off_t off = BLOCK_OFFSET(ROOT_DIR_BLOCKNO);
 	off = lseek(fd, off, SEEK_SET);
 	if (off == -1)
@@ -510,7 +501,6 @@ void write_lost_and_found_dir_block(int fd)
 
 void write_hello_world_file_block(int fd)
 {
-	/* This is all you */
 	off_t off = BLOCK_OFFSET(HELLO_WORLD_FILE_BLOCKNO);
 	off = lseek(fd, off, SEEK_SET);
 	if (off == -1)
