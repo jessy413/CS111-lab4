@@ -301,7 +301,8 @@ void write_block_bitmap(int fd)
 	unsigned char *bitmap;
 
 	bitmap = malloc(BLOCK_SIZE);
-	read(fd, bitmap, BLOCK_SIZE);
+	if (read(fd, bitmap, BLOCK_SIZE) == -1)
+		errno_exit("read");
 
 	bitmap[0] = 255;
 	bitmap[1] = 255;
