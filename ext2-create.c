@@ -338,7 +338,8 @@ void write_inode_bitmap(int fd)
 	for (int i = 16; i < 1024; i++)
 		bitmap[i] = 255;
 
-	write(fd, bitmap, BLOCK_SIZE);
+	if (write(fd, bitmap, BLOCK_SIZE) != BLOCK_SIZE)
+		errno_exit("write");
 }
 
 void write_inode(int fd, u32 index, struct ext2_inode *inode)
@@ -510,7 +511,8 @@ void write_hello_world_file_block(int fd)
 	strcpy(buf, "Hello world\n");
 	size_t nbytes = strlen(buf);
 
-	write(fd, buf, nbytes);
+	if (write(fd, buf, nbytes) != nbytes)
+		errno_exit("write");
 }
 
 int main(int argc, char *argv[])
