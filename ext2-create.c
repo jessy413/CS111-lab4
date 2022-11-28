@@ -301,7 +301,8 @@ void write_block_bitmap(int fd)
 	unsigned char *bitmap;
 
 	bitmap = malloc(BLOCK_SIZE);
-	read(fd, bitmap, BLOCK_SIZE);
+	if (read(fd, bitmap, BLOCK_SIZE) == -1)
+		errno_exit("read");
 
 	bitmap[0] = 255;
 	bitmap[1] = 255;
@@ -311,11 +312,10 @@ void write_block_bitmap(int fd)
 	for (int i = 128; i < 1024; i++)
 		bitmap[i] = 255;
 
-	if (write(fd, bitmap,BLOCK_SIZE) != BLOCK_SIZE)
+	if (write(fd, bitmap, BLOCK_SIZE) != BLOCK_SIZE)
 	{
 		errno_exit("write");
 	}
-
 }
 
 void write_inode_bitmap(int fd)
@@ -330,7 +330,8 @@ void write_inode_bitmap(int fd)
 	unsigned char *bitmap;
 
 	bitmap = malloc(BLOCK_SIZE);
-	read(fd, bitmap, BLOCK_SIZE);
+	if (read(fd, bitmap, BLOCK_SIZE) == -1)
+		errno_exit("read");
 
 	bitmap[0] = 255;
 	bitmap[1] = 31;
@@ -339,7 +340,8 @@ void write_inode_bitmap(int fd)
 	for (int i = 16; i < 1024; i++)
 		bitmap[i] = 255;
 
-	write(fd, bitmap, BLOCK_SIZE);
+	if (write(fd, bitmap, BLOCK_SIZE) != BLOCK_SIZE)
+		errno_exit("write");
 }
 
 void write_inode(int fd, u32 index, struct ext2_inode *inode)
@@ -376,7 +378,6 @@ void write_inode_table(int fd)
 	lost_and_found_inode.i_block[0] = LOST_AND_FOUND_DIR_BLOCKNO;
 	write_inode(fd, LOST_AND_FOUND_INO, &lost_and_found_inode);
 
-
 	// root
 	struct ext2_inode root_inode = {0};
 	root_inode.i_mode = EXT2_S_IFDIR | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IXUSR | EXT2_S_IRGRP | EXT2_S_IXGRP | EXT2_S_IROTH | EXT2_S_IXOTH;
@@ -394,7 +395,7 @@ void write_inode_table(int fd)
 
 	// hello-world
 	struct ext2_inode hello_world_inode = {0};
-	hello_world_inode.i_mode = EXT2_S_IFREG | EXT2_S_IRUSR | EXT2_S_IWUSR  | EXT2_S_IRGRP | EXT2_S_IROTH;
+	hello_world_inode.i_mode = EXT2_S_IFREG | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IRGRP | EXT2_S_IROTH;
 	hello_world_inode.i_uid = 1000;
 	hello_world_inode.i_size = 12;
 	hello_world_inode.i_atime = current_time;
@@ -409,7 +410,7 @@ void write_inode_table(int fd)
 
 	// hello
 	struct ext2_inode hello_inode = {0};
-	hello_inode.i_mode = EXT2_S_IFLNK | EXT2_S_IRUSR | EXT2_S_IWUSR  | EXT2_S_IRGRP  | EXT2_S_IROTH ;
+	hello_inode.i_mode = EXT2_S_IFLNK | EXT2_S_IRUSR | EXT2_S_IWUSR | EXT2_S_IRGRP | EXT2_S_IROTH;
 	hello_inode.i_uid = 1000;
 	hello_inode.i_size = 11;
 	hello_inode.i_atime = current_time;
@@ -512,7 +513,8 @@ void write_hello_world_file_block(int fd)
 	strcpy(buf, "Hello world\n");
 	size_t nbytes = strlen(buf);
 
-	write(fd, buf, nbytes);
+	if (write(fd, buf, nbytes) != nbytes)
+		errno_exit("write");
 }
 
 int main(int argc, char *argv[])
